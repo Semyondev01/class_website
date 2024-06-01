@@ -1,0 +1,689 @@
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta name="viewport" content="width=device-width">
+    <style>
+        /* Слайдер */
+        .slick-slider{}
+        /* Слайдер запущен */
+        .slick-slider.slick-initialized{}
+        /* Слайдер с точками */
+        .slick-slider.slick-dotted{}
+        /* Ограничивающая оболочка */
+        .slick-list {
+            overflow: hidden;
+        }
+        /* Лента слайдов */
+        .slick-track{
+            display: flex;
+        }
+        /* Слайд */
+        .slick-slide{}
+        /* Слайд активный (показывается) */
+        .slick-slide.slick-active{}
+        /* Слайд основной */
+        .slick-slide.slick-current{}
+        /* Слайд по центру */
+        .slick-slide.slick-center{}
+        /* Клонированный слайд */
+        .slick-slide.slick-cloned{}
+        /* Стрелка */
+        .slick-arrow{}
+        /* Стрелка влево */
+        .slick-arrow.slick-prev{}
+        /* Стрелка вправо */
+        .slick-arrow.slick-next{}
+        /* Стрелка не активная */
+        .slick-arrow.slick-disabled{}
+        /* Точки (булиты) */
+        .slick-dots{}
+        .slick-dots li{}
+        /* Активная точка */
+        .slick-dots li.slick-active{}
+        /* Элемент точки */
+        .slick-dots li button{}
+        .slider {
+            width: 30%;
+            position: absolute;
+            left: 500px;
+            top: 100px;
+        }
+        .slider .slick-dots li.slick-active button {
+            background-color: transparent;
+            border: 1px solid #000;
+        }
+        .slider .slick-dots button{
+            font-size: 0;
+            width: 10px;
+            height: 10px;
+            background-color: grey;
+            border-radius: 50%;
+            border: none;
+            position: relative;
+            left: 400px;
+
+        }
+        .slider .slick-dots li {
+            list-style: none;
+            margin: 0px 10px;
+        }
+        .slider .slick-dots{
+            display: flex;
+            align-items: center;
+            justify-items: center;
+        }
+        .slider .slick-arrow{
+            position: absolute;
+            top: 50%;
+            margin:  -30px 0px 0px 0px;
+            z-index: -1000;
+        }
+        .slider .slick-arrow.slick-arrow.slick-prev {
+            left: 0;
+            top: 150px;
+            z-index: 100;
+            position: absolute;
+            left: 350px;
+            top: 520px;
+
+        }
+        .slider .slick-arrow.slick-arrow.slick-next {
+            left: 0;
+            top: 150px;
+            z-index: 100;
+            position: absolute;
+            left: 550px;
+            top: 520px;
+
+        }
+        .slider {
+            position: absolute;
+            width: 900px;
+            left: 100px;
+            top: 70px;
+        }
+        .form {
+            margin-top: 100px;
+            width: 300px;
+        }
+        a {
+            color: #7c9ab7;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+        }
+
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: unset;
+            border-bottom: 2px solid #e3e3e3;
+            outline: none;
+        }
+
+        button {
+            padding: 10px;
+            background: #e3e3e3;
+            border: unset;
+            cursor: pointer;
+        }
+
+        .msg {
+            border: 2px solid #ffa908;
+            border-radius: 3px;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .logout {
+            color: #b7625c;
+        }
+        #hhh {
+            color: skyblue;
+        }
+        #ccc {
+            color: white;
+            margin-left: 22px;
+            width: 200px;
+            height: 50px;
+            border:  3px solid #000;
+            border-radius: 10px 10px;
+            position: absolute;
+            right: 0;
+            top: 50px;
+            background-color: #ff1213;
+        }
+        #march {
+            color: white;
+            margin-left: 22px;
+            width: 200px;
+            height: 50px;
+            border:  3px solid #000;
+            border-radius: 10px 10px;
+            position: absolute;
+            right: 0;
+            top: 50px;
+            background-color: #70e458;
+        }
+        #march2 {
+            color: white;
+            margin-left: 22px;
+            width: 200px;
+            height: 50px;
+            border:  3px solid #000;
+            border-radius: 10px 10px;
+            position: absolute;
+            right: 0;
+            top: 100px;
+            background-color: #70e458;
+        }
+
+
+        .page {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #soshial {
+            margin-left: 30px;
+        }
+
+        #rights {
+            margin-left: 30px;
+        }
+        footer {
+            <?php
+            $mysql = new mysqli('localhost', 'root', '', '4vclass');
+            if (isset($_SESSION['user'])) {
+             $mylogin = $_SESSION['user']['login'];
+             $res = $mysql->query("SELECT * FROM `style` WHERE `login` = '$mylogin'");
+            $vih = mysqli_fetch_assoc($res);
+            $color = $vih['mycolor'];
+             } else{
+                $color = '#000';
+             }
+            ?>
+            background-color: <?=$color?>;
+            max-width:3000px;
+            flex: 0 0 auto;
+            color: white;
+        }
+
+        #img {
+            width: 60px;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1 0 auto;
+        }
+
+        #ff {
+            margin-left: 10px;
+        }
+        .date {
+
+            position: absolute;
+             right: 200px;
+
+
+        }
+        .one {
+            width: 60px;
+            height: 50px;
+            font-size: 40px;
+            text-align: right;
+            margin-right: 10px;
+
+
+        }
+
+        header {
+            position: fixed;
+            z-index: 0;
+            margin: 0;
+            width: 2000px;
+            overflow: hidden;
+        }
+        @keyframes showheader {
+            0%{
+                opacity: 0;
+                top: -70%;
+            }
+            100%{
+                opacity: 1;
+                top: 0;
+            }
+        }
+        #gf {
+            text-align: center;
+            font-size: 30px;
+        }
+        #imgs, #hell1, #imgs2, #imgs3, #imgs1 {
+            position: absolute;
+            top: 50px;
+            left: 400px;
+            z-index: 99;
+        }
+
+        .one, .y{
+            display: inline-block;
+        }
+        * {
+            margin: 0;
+            /* box-sizing: border-box; */
+        }
+
+        .wrapper{
+            max-width:2000px;
+            height: 880px;
+            display: flex;
+            flex-direction: column;
+            margin: 0px 0px 15px 15px;
+        }
+        footer {
+            max-width: 2000px;
+        }
+        body {
+        }
+        body, html {
+            height: 100%;
+        }
+        body {
+            width: 100%;
+            height: 100%;
+        }
+        .inf {
+            display: none;
+        }
+        @media (max-width: 1085px){
+            .slider {
+                display: none;
+            }
+        }
+        @media (max-width: 1085px) {
+            .inf {
+              display: block;
+            }
+
+        }
+        @media (max-width: 1085px) {
+            header {
+                position: relative;
+            }
+        }
+        @media (max-width: 1090px) {
+            footer {
+                opacity: 0;
+            }
+        }
+        #popup {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: 1s;
+        }
+        #popup_body {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-items: center;
+            padding: 30px 10px;
+            position: absolute;
+        }
+        #popup_content {
+            background-color: white;
+            color: black;
+            max-width: 800px;
+            padding: 30px;
+            position: relative;
+            opacity: 0;
+            transform: perspective(600px) translate(0px, -100px) rotateX(45deg);
+            transition: 1s;
+        }
+        .popup_close {
+position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 20px;
+            color: black;
+            text-decoration: none;
+        }
+        .popup_title {
+            font-size: 40px;
+            margin: 0px 0px 1em 0px;
+        }
+        #popup:target {
+            opacity: 1;
+            visibility: visible;
+        }
+        #popup:target #popup_content {
+            opacity: 1;
+            transform: perspective(600px) translate(0px, 0%) rotateX(0deg);
+        }
+
+
+        <?php
+ $mysql = new mysqli('localhost', 'root', '', '4vclass');
+ $cool = $mysql->query("SELECT * FROM `css`");
+ while ($gg = mysqli_fetch_assoc($cool)) {
+    echo $gg['Code'];
+ }
+
+ ?>
+
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Наш 4 "В" класс</title>
+    <link rel="shortcut icon" href="images\4v.jpg" type="image/x-icon">
+    <meta name="keywords" content="4vclass, class, site">
+    <meta name="description" content="Это сайт нашего 4 В класса. Здесь вы найдёте интересные игры, новости и многое другое! Пререходите - не пожалеете!" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(91118282, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/91118282" style="" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+
+</head>
+<body>
+<header class="navdar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand" title="С наступающим Новым годом!!!"></a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+
+                <li class="active" onmouseover="document.getElementById('imgs').style.display = 'block'" onmouseout="document.getElementById('imgs').style.display = 'none'"><a href="/">Главная</a></li>
+                <img style="display: none" id="imgs" src="images/gl.jpg" width="200px">
+                <li class="active" onmouseover="document.getElementById('hell1').style.display = 'block'" onmouseout="document.getElementById('hell1').style.display = 'none'"><a href="onass.php">О нас</a></li>
+                <img src="images/Onas.jpg" id="hell1" style="display: none" width="200px">
+                <li class="active" onmouseover="document.getElementById('imgs1').style.display = 'block'" onmouseout="document.getElementById('imgs1').style.display = 'none'"><a href="novost.php">Новости</a></li>
+                <img style="display: none" id="imgs1" src="images/news.jpg" width="200px">
+                <li class="active" onmouseover="document.getElementById('imgs2').style.display = 'block'" onmouseout="document.getElementById('imgs2').style.display = 'none'"><a href="contact.php">Контакты</a></li>
+                <img style="display: none" id="imgs2" src="images/cont.jpg" width="200px">
+                <li class="active" onmouseover="document.getElementById('imgs3').style.display = 'block'" onmouseout="document.getElementById('imgs3').style.display = 'none'"><a href="razvl.php">Развлечения</a></li>
+                <img style="display: none" id="imgs3" src="images/game.jpg" width="200px">
+
+
+            </ul>
+            <div class="navbar-header1">
+                <a href="profile1.php" class="navbar-brand"><img src="images/profile.png" alt="" width="20px" height="20px"></a>
+            </div>
+
+        </div>
+    </div>
+</header>
+<header class="navdar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand" title="С наступающим Новым годом!!!"></a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+
+                <li class="active" onmouseover="document.getElementById('imgs').style.display = 'block'" onmouseout="document.getElementById('imgs').style.display = 'none'"><a href="/">Главная</a></li>
+                <img style="display: none" id="imgs" src="images/gl.jpg" width="200px">
+                <li class="active" onmouseover="document.getElementById('hell1').style.display = 'block'" onmouseout="document.getElementById('hell1').style.display = 'none'"><a href="onass.php">О нас</a></li>
+                <img src="images/Onas.jpg" id="hell1" style="display: none" width="200px">
+                <li class="active" onmouseover="document.getElementById('imgs1').style.display = 'block'" onmouseout="document.getElementById('imgs1').style.display = 'none'"><a href="novost.php">Новости</a></li>
+                <img style="display: none" id="imgs1" src="images/news.jpg" width="200px">
+                <li class="active" onmouseover="document.getElementById('imgs2').style.display = 'block'" onmouseout="document.getElementById('imgs2').style.display = 'none'"><a href="contact.php">Контакты</a></li>
+                <img style="display: none" id="imgs2" src="images/cont.jpg" width="200px">
+                <li class="active" onmouseover="document.getElementById('imgs3').style.display = 'block'" onmouseout="document.getElementById('imgs3').style.display = 'none'"><a href="razvl.php">Развлечения</a></li>
+                <img style="display: none" id="imgs3" src="images/game.jpg" width="200px">
+
+                <div class="date">
+                    <?php date_default_timezone_set('Asia/Yekaterinburg');
+                    $month = [
+                        'Январь',
+                        'Февраль',
+                        'Март',
+                        'Апрель',
+                        'Май',
+                        'Июнь',
+                        'Июль',
+                        'Август',
+                        'Сентябрь',
+                        'Октябрь',
+                        'Ноябрь',
+                        'Декабрь'
+                    ];
+                    $day = [
+                        'Понедельник',
+                        'Вторник',
+                        'Среда',
+                        'Четверг',
+                        'Пятница',
+                        'Суббота',
+                        'Воскресенье'
+                    ];
+                    echo "<div class=one>";
+                    $b4 = Date('j');
+                    echo "$b4";
+                    echo "</div>";
+                    echo "<div class=y>";
+                    $b = Date('n')-1;
+                    $c = $month["$b"];
+                    echo "$c";
+                    echo "<br>";
+                    $b1 = Date('N')-1;
+                    $c1 = $day["$b1"];
+                    echo "$c1";
+                    echo "</div>";
+                    "<br>";
+
+
+                    ?>
+                </div>
+
+            </ul>
+            <div class="navbar-header1">
+                <a href="profile1.php" class="navbar-brand"><img src="images/profile.png" alt="" width="20px" height="20px"></a>
+            </div>
+
+        </div>
+    </div>
+</header>
+<div id="popup">
+    <div id="popup_body">
+        <div id="popup_content">
+            <a href="#" class="popup_close"><img src="images/ccre.png" alt="" width="50px"></a>
+            <div class="popup_title">Меню</div>
+            <div id="popup_text"><a href="index.php">Главная</a><br>
+                <a href="novost.php">Новости</a><br>
+                <a href="onass.php">О нас</a><br>
+                <a href="contact.php">Контакты</a><br>
+                <a href="razvl.php">Развлечения</a><br>
+                <a href="profile1.php">Профиль</a><br>
+                <br>
+                <br>
+                <br>
+                Все права защищены &copy. <?=date('Y')?> год. <br>
+                By Semyon UI.
+            </div>
+        </div>
+    </div>
+</div>
+<div class="wrapper">
+
+
+<div class="slider">
+    <div class="slider_item">
+        <img src="images/myschool.jpg" alt="" width="200px" height="200px">
+    </div>
+    <div class="slider_item">
+        <img src="images/class.jpg" alt="" width="200px" height="200px">
+    </div>
+    <div class="slider_item">
+        <img src="images/class2.jpg" alt="" width="200px" height="200px">
+    </div>
+    <div class="slider_item">
+        <img src="images/profile.png" alt="" width="100px" height="100px" style="border-radius:50%">
+        <h3>Семён</h3>
+        <p>Генеральный исполнительный директор</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mattis, est quis luctus imperdiet, nisl odio tristique ligula, id euismod ex nisi vitae ligula. Nam euismod elit mattis semper vehicula. Etiam luctus tellus mauris, eu laoreet dui pharetra ut. Duis tristique, nisl in volutpat sagittis, augue lacus ultricies dui, porttitor bibendum ipsum ante id quam. Proin at massa dignissim, euismod lacus at, laoreet velit. Aenean fringilla ultrices enim eu rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris et iaculis leo, ac rhoncus nisi. Donec in ex cursus, ultrices est quis, pellentesque est. Aenean gravida.</p>
+    </div>
+    <div class="slider_item">
+        <img src="images/profile.png" alt="" width="100px" height="100px" style="border-radius:50%">
+        <h3>Никита</h3>
+        <p>Художественный директор</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mattis, est quis luctus imperdiet, nisl odio tristique ligula, id euismod ex nisi vitae ligula. Nam euismod elit mattis semper vehicula. Etiam luctus tellus mauris, eu laoreet dui pharetra ut. Duis tristique, nisl in volutpat sagittis, augue lacus ultricies dui, porttitor bibendum ipsum ante id quam. Proin at massa dignissim, euismod lacus at, laoreet velit. Aenean fringilla ultrices enim eu rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris et iaculis leo, ac rhoncus nisi. Donec in ex cursus, ultrices est quis, pellentesque est. Aenean gravida.</p>
+    </div>
+
+    <div class="slider_item">
+        <img src="images/profile.png" alt="" width="100px" height="100px" style="border-radius:50%">
+        <h3>Петр</h3>
+        <p>Испытатаель</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mattis, est quis luctus imperdiet, nisl odio tristique ligula, id euismod ex nisi vitae ligula. Nam euismod elit mattis semper vehicula. Etiam luctus tellus mauris, eu laoreet dui pharetra ut. Duis tristique, nisl in volutpat sagittis, augue lacus ultricies dui, porttitor bibendum ipsum ante id quam. Proin at massa dignissim, euismod lacus at, laoreet velit. Aenean fringilla ultrices enim eu rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris et iaculis leo, ac rhoncus nisi. Donec in ex cursus, ultrices est quis, pellentesque est. Aenean gravida.</p>
+    </div>
+
+</div>
+    <div class="inf" style="margin: 0px 0px 0px 0px"><div class="header"><center><a href="#popup"><img
+                            src="images/menu2.png" title="Меню" alt="Меню" width="200px" style="margin-left: 0px"></a>
+            </center></div>
+        <h1>Разработчики</h1>
+        <div class="ok"> <div class="slider_item">
+                <img src="images/profile.png" alt="" width="100px" height="100px" style="border-radius:50%">
+                <h3>Семён</h3>
+                <p>Генеральный исполнительный директор</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mattis, est quis luctus imperdiet, nisl odio tristique ligula, id euismod ex nisi vitae ligula. Nam euismod elit mattis semper vehicula. Etiam luctus tellus mauris, eu laoreet dui pharetra ut. Duis tristique, nisl in volutpat sagittis, augue lacus ultricies dui, porttitor bibendum ipsum ante id quam. Proin at massa dignissim, euismod lacus at, laoreet velit. Aenean fringilla ultrices enim eu rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris et iaculis leo, ac rhoncus nisi. Donec in ex cursus, ultrices est quis, pellentesque est. Aenean gravida.</p>
+            </div></div>
+        <div class="on"><div class="slider_item">
+                <img src="images/profile.png" alt="" width="100px" height="100px" style="border-radius:50%">
+                <h3>Никита</h3>
+                <p>Художественный директор</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mattis, est quis luctus imperdiet, nisl odio tristique ligula, id euismod ex nisi vitae ligula. Nam euismod elit mattis semper vehicula. Etiam luctus tellus mauris, eu laoreet dui pharetra ut. Duis tristique, nisl in volutpat sagittis, augue lacus ultricies dui, porttitor bibendum ipsum ante id quam. Proin at massa dignissim, euismod lacus at, laoreet velit. Aenean fringilla ultrices enim eu rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris et iaculis leo, ac rhoncus nisi. Donec in ex cursus, ultrices est quis, pellentesque est. Aenean gravida.</p>
+            </div></div>
+        <div class="oj"><div class="slider_item">
+                <img src="images/profile.png" alt="" width="100px" height="100px" style="border-radius:50%">
+                <h3>Петр</h3>
+                <p>Испытатаель</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus mattis, est quis luctus imperdiet, nisl odio tristique ligula, id euismod ex nisi vitae ligula. Nam euismod elit mattis semper vehicula. Etiam luctus tellus mauris, eu laoreet dui pharetra ut. Duis tristique, nisl in volutpat sagittis, augue lacus ultricies dui, porttitor bibendum ipsum ante id quam. Proin at massa dignissim, euismod lacus at, laoreet velit. Aenean fringilla ultrices enim eu rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris et iaculis leo, ac rhoncus nisi. Donec in ex cursus, ultrices est quis, pellentesque est. Aenean gravida.</p>
+            </div>
+        <h1>Фотографии</h1>
+
+            <div class="slider_item">
+               <center> <img src="images/myschool.jpg" alt="" width="200px" height="200px"></center>
+            </div>
+            <br>
+            <div class="slider_item">
+               <center> <img src="images/class.jpg" alt="" width="200px" height="200px"></center>
+            </div>
+            <br>
+            <div class="slider_item">
+                <center><img src="images/class2.jpg" alt="" width="200px" height="200px"><br></center>
+            </div>
+            <br>
+        </div>
+    </div>
+
+
+    <?php $mysql = new mysqli('localhost', 'root', '', '4vclass');
+    $cod44 = $mysql->query("SELECT * FROM `predupr`");
+    if (mysqli_num_rows($cod44) == 0) {
+
+    } else {
+
+    ?>
+    <div id="ccc" onclick="(document.getElementById('ccc').style.display ='none')">
+        <?php } ?>
+
+        <?php
+        $mysql = new mysqli('localhost', 'root', '', '4vclass');
+        $cod = $mysql->query("SELECT * FROM `predupr`");
+        while ($dd = mysqli_fetch_assoc($cod)) {
+            echo $dd['predupr'];
+            echo "<br>";
+        }
+
+        ?>
+    </div>
+<!--    <div id="march" onclick="(document.getElementById('march').style.display ='none')">-->
+<!--   <a href="girl.php" style="text-decoration: none; color: black">С 8 марта, девочки!</a>-->
+<!--    </div>-->
+<!---->
+<!--    <div id="march2" onclick="(document.getElementById('march2').style.display ='none')">-->
+<!--        <a href="teacher.php" style="text-decoration: none; color: black">С 8 марта, Татьяна Владимировна!</a>-->
+<!--    </div>-->
+
+
+<div class="js">
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+        <script src="js/slick.min.js"></script>
+        <script>
+            $(document).ready(function (){
+                $('.slider').slick({
+                    slidesToShow:3,
+                    slidesToScroll:3,
+                    autoplay:true,
+                    dots:true,
+                    speed:2000,
+                });
+            });
+        </script>
+
+    <script>
+        let a = window.innerWidth;
+        if (a <= 1000) {
+            console.log(a)
+            document.querySelector('.slider').style.display = 'none';
+        }
+    </script>
+
+</div>
+</div>
+<footer>
+    <center><img id="img" src="/images/4v.jpg"></center>
+    <div id="ff">
+        Все права защищены &copy. <?=date('Y')?> год
+    </div>
+</footer>
+
+</body>
+</html>
